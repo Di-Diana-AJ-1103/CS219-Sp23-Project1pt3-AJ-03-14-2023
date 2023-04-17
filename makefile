@@ -1,6 +1,6 @@
-machineLangSim: main.o
+machineLangSim: driver.o
 	g++ -o machineLangSim main.o 
-main.o: main.cpp 
-	g++ -c main.cpp 
+driver.o: driver.cpp 
+	g++ -c driver.cpp 
 clean:
 	rm *.o machineLangSim
