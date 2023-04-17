@@ -29,7 +29,7 @@ void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string ope
 int main(){
     std::fstream myfile ("Programming-Project-3.txt");
     int userChoice;
-    std::string line, operation;
+    std::string line, operation, registry;
     uint32_t hex1, hex2, hexResult, binPlaces, r0, r1, r2, r3, r4, r5, r6, r7;
     if (myfile.is_open()){
         myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
@@ -47,7 +47,7 @@ int main(){
                     while (myfile.good()){
                         for(int lineCount = 1; lineCount <= 13; lineCount++){
                             //needs to be fixed
-                            if(lineCount == 1){
+                            if(lineCount == 1 || lineCount == 2 || lineCount == 5 || lineCount == 9){
                                 myfile >> operation >> std::hex >> hex1;
                                 hexResult = ~hex1;
                                 std::cout << operation << " 0x" << std::hex << hex1 << ": 0x" << std::hex << hexResult << std::endl;
@@ -133,6 +133,15 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
         hexResult = hex1 & hex2;
     }
     return hexResult;
+}
+
+//Has to take in all registries as parameters (oh lawd)
+void moveRegister(std::string operation, std::string registry, uint32_t r0, uint32_t hex1){
+    //if(operation == "MOV" || "mov"){
+        if(registry == "r0" || "R0"){
+            r0 = hex1;
+        }
+   // }
 }
 
 int ASR(uint32_t hex1, uint32_t  hex2){
