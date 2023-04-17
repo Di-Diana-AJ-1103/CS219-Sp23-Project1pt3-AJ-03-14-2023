@@ -21,6 +21,8 @@ int arithmeticCommand(std::string, uint32_t, uint32_t);
 int ASR(uint32_t, uint32_t);
 bool Nflag(uint32_t);
 bool Zflag(uint32_t);
+bool Cflag();
+bool Vflag();
 void flagPrint(uint32_t, std::string);
 
 //Main Function
@@ -69,7 +71,7 @@ int main(){
                 }
                 break;
             case 2:
-                myfile.open ("Programming-Project-2.txt");
+                myfile.open ("Programming-Project-3.txt");
                 if (myfile.is_open()){
                     while (!myfile.eof()){
                         getline(myfile, line);
@@ -77,7 +79,7 @@ int main(){
                     }
                     myfile.close();
                 }else{
-                    std::cout << "Unable to open file";
+                    std::cout << "Unable to open file" << std::endl;
                 }
                 break;
             case 0:
@@ -156,4 +158,12 @@ bool Zflag(uint32_t hexResult){
         return true;
     }
     return false;
+}
+
+bool Cflag(){
+
+}
+
+bool Vflag(){
+
 }
