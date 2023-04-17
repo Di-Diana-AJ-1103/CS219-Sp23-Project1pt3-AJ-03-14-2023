@@ -23,7 +23,7 @@ bool Nflag(uint32_t);
 bool Zflag(uint32_t);
 bool Cflag();
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2);
-void flagPrint(uint32_t, std::string);
+void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation);
 
 //Main Function
 int main(){
@@ -55,12 +55,12 @@ int main(){
                                 myfile >> operation >> std::hex >> hex1 >> binPlaces;
                                 hexResult = arithmeticCommand(operation, hex1, binPlaces);
                                 std::cout << operation << " 0x" << std::hex << hex1 << " " << binPlaces << ": 0x" << std::hex << hexResult << std::endl;
-                                flagPrint(hexResult, operation);
+                                flagPrint(hexResult, hex1, hex2, operation);
                             }else{
                                 myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
                                 hexResult = arithmeticCommand(operation, hex1, hex2);
                                 std::cout << operation << " 0x" << std::hex << hex1 << " 0x" << std::hex << hex2 << ": 0x" << std::hex << hexResult << std::endl;
-                                flagPrint(hexResult, operation);
+                                flagPrint(hexResult, hex1, hex2, operation);
                             }
                         }
                     }
@@ -99,9 +99,9 @@ void mainMenu(){
                  "  0 -> Exit Sim" << std::endl;       
 }
 
-void flagPrint(uint32_t hexResult, std::string operation){
+void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation){
     if(operation.length() == 4){
-        std::cout << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) << std::endl;
+        std::cout << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) << " V: " << Vflag(hexResult, hex1, hex2) << std::endl;
     }else{
         std::cout << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl;
     }
