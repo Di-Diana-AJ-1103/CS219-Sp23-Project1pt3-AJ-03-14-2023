@@ -22,7 +22,7 @@ int ASR(uint32_t, uint32_t);
 bool Nflag(uint32_t);
 bool Zflag(uint32_t);
 bool Cflag();
-bool Vflag();
+bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2);
 void flagPrint(uint32_t, std::string);
 
 //Main Function
@@ -30,7 +30,7 @@ int main(){
     std::fstream myfile ("Programming-Project-3.txt");
     int userChoice;
     std::string line, operation;
-    uint32_t hex1, hex2, hexResult, binPlaces;
+    uint32_t hex1, hex2, hexResult, binPlaces, r0, r1, r2, r3, r4, r5, r6, r7;
     if (myfile.is_open()){
         myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
         myfile.close();
@@ -45,13 +45,12 @@ int main(){
                 myfile.open ("Programming-Project-2.txt");
                 if (myfile.is_open()){
                     while (myfile.good()){
-                        for(int lineCount = 1; lineCount <= 36; lineCount++){
+                        for(int lineCount = 1; lineCount <= 13; lineCount++){
                             //needs to be fixed
-                            if(lineCount >= 21 && lineCount <= 24){
+                            if(lineCount == 1){
                                 myfile >> operation >> std::hex >> hex1;
                                 hexResult = ~hex1;
                                 std::cout << operation << " 0x" << std::hex << hex1 << ": 0x" << std::hex << hexResult << std::endl;
-                                flagPrint(hexResult, operation);
                             }else if(lineCount >= 9 && lineCount <= 20){
                                 myfile >> operation >> std::hex >> hex1 >> binPlaces;
                                 hexResult = arithmeticCommand(operation, hex1, binPlaces);
@@ -104,7 +103,7 @@ void flagPrint(uint32_t hexResult, std::string operation){
     if(operation.length() == 4){
         std::cout << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) << std::endl;
     }else{
-        std::cout << "N: 0 " << " Z: 0" << std::endl;
+        std::cout << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl;
     }
 }
 
@@ -164,6 +163,10 @@ bool Cflag(){
 
 }
 
-bool Vflag(){
-
+bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2){
+    if((hexResult < hex1) || (hexResult < hex2)){
+        return true;
+    }else{
+        return false;
+    }
 }
