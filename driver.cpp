@@ -76,7 +76,7 @@ int main(){
                                 std::cout << operation << " R" << regNum << ", R" << regNum2 << ", #" << binPlaces << std::endl;
                                 printRegistries(registries);
                                 flagPrint(hexResult, hex1, hex2, operation);
-                            }else{
+                            }else if((lineCount >= 3 || lineCount <= 4) || (lineCount >= 6 || lineCount <= 8)){
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2 >> buffer >> buffer >> regNum3;
                                 hex1 = registries[regNum2];
                                 hex2 = registries[regNum3];
