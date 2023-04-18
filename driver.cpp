@@ -25,6 +25,7 @@ bool Zflag(uint32_t);
 bool Cflag();
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2);
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation);
+void printRegistries(uint32_t registries[]);
 
 //Main Function
 int main(){
@@ -34,7 +35,7 @@ int main(){
     char buffer; 
     std::string line, operation;
     uint32_t hex1, hex2, hexResult, binPlaces;
-    int registries[MAX];
+    uint32_t registries[MAX];
 
     if (myfile.is_open()){
         myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
@@ -141,11 +142,11 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
 }
 
 //Has to take in all registries as parameters (oh lawd)
-void moveRegister(std::string operation, int registries[] ,int regNum, uint32_t hex1){
+void moveRegister(std::string operation, uint32_t registries[] ,int regNum, uint32_t hex1){
     registries[regNum] = hex1;
 }
 
-void printRegisters(int registries[]){
+void printRegistries(uint32_t registries[]){
     for(int i = 0; i < MAX; i++){
         std::cout << "R" << i << ":0x" << registries[i] << " ";
     }
