@@ -13,6 +13,7 @@
 #include <sstream>
 #include <string>
 #include <cstdint>
+#define MAX 8
 
 //Prototype functions
 void mainMenu();
@@ -28,9 +29,13 @@ void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string ope
 //Main Function
 int main(){
     std::fstream myfile ("Programming-Project-3.txt");
-    int userChoice;
-    std::string line, operation, registry;
-    uint32_t hex1, hex2, hexResult, binPlaces, r0, r1, r2, r3, r4, r5, r6, r7;
+    int userChoice, regNum;
+    //char for reading the r for registry and the hashes
+    char buffer; 
+    std::string line, operation;
+    uint32_t hex1, hex2, hexResult, binPlaces;
+    int registries[MAX];
+
     if (myfile.is_open()){
         myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
         myfile.close();
@@ -42,13 +47,13 @@ int main(){
         userChoice = getOpt();
         switch(userChoice){
             case 1:
-                myfile.open ("Programming-Project-2.txt");
+                myfile.open ("Programming-Project-3.txt");
                 if (myfile.is_open()){
                     while (myfile.good()){
                         for(int lineCount = 1; lineCount <= 13; lineCount++){
                             //needs to be fixed
                             if(lineCount == 1 || lineCount == 2 || lineCount == 5 || lineCount == 9){
-                                myfile >> operation >> std::hex >> hex1;
+                                myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
                                 hexResult = ~hex1;
                                 std::cout << operation << " 0x" << std::hex << hex1 << ": 0x" << std::hex << hexResult << std::endl;
                             }else if(lineCount >= 9 && lineCount <= 20){
@@ -136,12 +141,14 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
 }
 
 //Has to take in all registries as parameters (oh lawd)
-void moveRegister(std::string operation, std::string registry, uint32_t r0, uint32_t hex1){
-    //if(operation == "MOV" || "mov"){
-        if(registry == "r0" || "R0"){
-            r0 = hex1;
-        }
-   // }
+void moveRegister(std::string operation, int registries[] ,int regNum, uint32_t hex1){
+    registries[regNum] = hex1;
+}
+
+void printRegisters(int registries[]){
+    for(int i = 0; i < MAX; i++){
+        std::cout << "R" << i << ":0x" << registries[i] << " ";
+    }
 }
 
 int ASR(uint32_t hex1, uint32_t  hex2){
