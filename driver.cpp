@@ -30,19 +30,22 @@ void moveRegister(uint32_t registries[] ,int regNum, uint32_t hex1);
 
 //Main Function
 int main(){
-    std::fstream myfile ("Programming-Project-3.txt");
-    int userChoice, regNum;
+    std::fstream myfile("Programming-Project-3.txt");
+    int userChoice, regNum, regNum2, regNum3;
     //char for reading the r for registry and the hashes
     char buffer; 
     std::string line, operation;
     uint32_t hex1, hex2, hexResult, binPlaces;
     uint32_t registries[MAX];
-
+    uint32_t zero = 0;
     if (myfile.is_open()){
-        myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
+        myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
         myfile.close();
     }else{
         std::cout << "Unable to open file" << std::endl;
+    }
+    for(int i = 0; i > MAX; i++){
+        registries[i] = zero;
     }
         do{
         mainMenu();
@@ -54,23 +57,22 @@ int main(){
                     while (myfile.good()){
                         for(int lineCount = 1; lineCount <= 13; lineCount++){
                             //needs to be fixed
-                            if(lineCount == 1 || lineCount == 2 || lineCount == 5 || lineCount == 9){
+                            if(lineCount == 1 || 2 || 5 || 9){
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
                                 moveRegister(registries, regNum, hex1);
                                 std::cout << operation << " R" << regNum << ", #0x" << std::hex << hex1 << std::endl;
                                 printRegistries(registries);
                                 flagPrint(hex1, hex1, hex1, operation);
-                            } // else if(lineCount >= 9 && lineCount <= 20){
-                            //     myfile >> operation >> std::hex >> hex1 >> binPlaces;
-                            //     hexResult = arithmeticCommand(operation, hex1, binPlaces);
-                            //     std::cout << operation << " 0x" << std::hex << hex1 << " " << binPlaces << ": 0x" << std::hex << hexResult << std::endl;
-                            //     flagPrint(hexResult, hex1, hex2, operation);
-                            // }else{
-                            //     myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
-                            //     hexResult = arithmeticCommand(operation, hex1, hex2);
-                            //     std::cout << operation << " 0x" << std::hex << hex1 << " 0x" << std::hex << hex2 << ": 0x" << std::hex << hexResult << std::endl;
-                            //     flagPrint(hexResult, hex1, hex2, operation);
-                            // }
+                            }else if(lineCount == 12 || 13){
+                                myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2;
+                                hex1 = registries[regNum];
+                                hex2 = registries[regNum2];
+                                hexResult = arithmeticCommand(operation, hex1, hex2);
+                                printRegistries(registries);
+                                flagPrint(hexResult, hex1, hex2, operation);
+                            }else{
+                                std::cout << " ";
+                            }
                         }
                     }
                     myfile.close();
@@ -109,10 +111,10 @@ void mainMenu(){
 }
 
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation){
-    if(operation.length() == 4){
-        std::cout << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) << " V: " << Vflag(hexResult, hex1, hex2) << std::endl;
+    if(operation.length() == 4 || operation == "CMP" || operation == "cmp"){
+        std::cout << std::endl << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) << " V: " << Vflag(hexResult, hex1, hex2) << std::endl;
     }else{
-        std::cout << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl;
+        std::cout << std::endl << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl;
     }
 }
 
@@ -126,7 +128,7 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
     int hexResult;
     if(operation == "ADD" || "ADDS" || "add" || "adds"){
         hexResult = hex1 + hex2;
-    }else if(operation == "SUB" || "SUBS" || "sub" || "subs"){
+    }else if(operation == "SUB" || "SUBS" || "sub" || "subs" || "CMP" || "cmp"){
         hexResult = hex1 - hex2;
     }else if(operation == "XOR" || "XORS" || "xor" || "xors"){
         hexResult = hex1 ^ hex2;
@@ -138,7 +140,7 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
         hexResult = hex1 >> hex2;
     }else if(operation == "ORR" || "ORRS" || "orr" || "orrs"){
         hexResult = hex1 | hex2;
-    }else if(operation == "AND" || "ANDS" || "and" || "ands"){
+    }else if(operation == "AND" || "ANDS" || "and" || "ands" || "TST" || "tst"){
         hexResult = hex1 & hex2;
     }
     return hexResult;
@@ -150,7 +152,7 @@ void moveRegister(uint32_t registries[] ,int regNum, uint32_t hex1){
 }
 
 void printRegistries(uint32_t registries[]){
-    for(int i = 0; i < MAX; i++){
+    for(uint32_t i = 0; i < MAX; i++){
         std::cout << "R" << i << ":0x" << registries[i] << " ";
     }
 }
@@ -180,7 +182,7 @@ bool Zflag(uint32_t hexResult){
 }
 
 bool Cflag(){
-
+    return false;
 }
 
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2){
