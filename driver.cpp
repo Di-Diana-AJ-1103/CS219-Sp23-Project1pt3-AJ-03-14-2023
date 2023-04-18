@@ -26,7 +26,6 @@ bool Cflag();
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2);
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation);
 void printRegistries(uint32_t registries[]);
-void moveRegister(uint32_t registries[] ,int regNum, uint32_t hex1);
 
 //Main Function
 int main(){
@@ -36,16 +35,13 @@ int main(){
     char buffer; 
     std::string line, operation;
     uint32_t hex1, hex2, hexResult, binPlaces;
-    uint32_t registries[MAX];
+    uint32_t registries[MAX]= { 0 };
     uint32_t zero = 0;
     if (myfile.is_open()){
         myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
         myfile.close();
     }else{
         std::cout << "Unable to open file" << std::endl;
-    }
-    for(int i = 0; i > MAX; i++){
-        registries[i] = zero;
     }
         do{
         mainMenu();
@@ -59,7 +55,8 @@ int main(){
                             //needs to be fixed
                             if(lineCount == 1 || 2 || 5 || 9){
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
-                                moveRegister(registries, regNum, hex1);
+                                registries[regNum] = hex1;
+                                std::cout << std::hex << hex1 << std::endl;
                                 std::cout << operation << " R" << regNum << ", #0x" << std::hex << hex1 << std::endl;
                                 printRegistries(registries);
                                 flagPrint(hex1, hex1, hex1, operation);
@@ -70,8 +67,22 @@ int main(){
                                 hexResult = arithmeticCommand(operation, hex1, hex2);
                                 printRegistries(registries);
                                 flagPrint(hexResult, hex1, hex2, operation);
+                            }else if(lineCount == 10 || 11){
+                                myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2 >> buffer >> buffer >> binPlaces;
+                                hex1 = registries[regNum2];
+                                hex2 = binPlaces;
+                                hexResult = arithmeticCommand(operation, hex1, hex2);
+                                registries[regNum] = hexResult;
+                                printRegistries(registries);
+                                flagPrint(hexResult, hex1, hex2, operation);
                             }else{
-                                std::cout << " ";
+                                myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2 >> buffer >> buffer >> regNum3;
+                                hex1 = registries[regNum2];
+                                hex2 = registries[regNum3];
+                                hexResult = arithmeticCommand(operation, hex1, hex2);
+                                registries[regNum] = hexResult;
+                                printRegistries(registries);
+                                flagPrint(hexResult, hex1, hex2, operation);
                             }
                         }
                     }
@@ -111,7 +122,7 @@ void mainMenu(){
 }
 
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation){
-    if(operation.length() == 4 || operation == "CMP" || operation == "cmp"){
+    if(operation.length() == 4 || operation == "CMP" || operation == "cmp" || operation == "TST" || operation == "tst"){
         std::cout << std::endl << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) << " V: " << Vflag(hexResult, hex1, hex2) << std::endl;
     }else{
         std::cout << std::endl << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl;
@@ -147,9 +158,6 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
 }
 
 //Has to take in all registries as parameters (oh lawd)
-void moveRegister(uint32_t registries[] ,int regNum, uint32_t hex1){
-    registries[regNum] = hex1;
-}
 
 void printRegistries(uint32_t registries[]){
     for(uint32_t i = 0; i < MAX; i++){
