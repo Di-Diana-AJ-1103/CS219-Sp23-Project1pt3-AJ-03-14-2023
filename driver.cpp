@@ -26,6 +26,7 @@ bool Cflag();
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2);
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation);
 void printRegistries(uint32_t registries[]);
+void moveRegister(uint32_t registries[] ,int regNum, uint32_t hex1);
 
 //Main Function
 int main(){
@@ -55,19 +56,21 @@ int main(){
                             //needs to be fixed
                             if(lineCount == 1 || lineCount == 2 || lineCount == 5 || lineCount == 9){
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
-                                hexResult = ~hex1;
-                                std::cout << operation << " 0x" << std::hex << hex1 << ": 0x" << std::hex << hexResult << std::endl;
-                            }else if(lineCount >= 9 && lineCount <= 20){
-                                myfile >> operation >> std::hex >> hex1 >> binPlaces;
-                                hexResult = arithmeticCommand(operation, hex1, binPlaces);
-                                std::cout << operation << " 0x" << std::hex << hex1 << " " << binPlaces << ": 0x" << std::hex << hexResult << std::endl;
-                                flagPrint(hexResult, hex1, hex2, operation);
-                            }else{
-                                myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
-                                hexResult = arithmeticCommand(operation, hex1, hex2);
-                                std::cout << operation << " 0x" << std::hex << hex1 << " 0x" << std::hex << hex2 << ": 0x" << std::hex << hexResult << std::endl;
-                                flagPrint(hexResult, hex1, hex2, operation);
-                            }
+                                moveRegister(registries, regNum, hex1);
+                                std::cout << operation << " R" << regNum << ", #0x" << std::hex << hex1 << std::endl;
+                                printRegistries(registries);
+                                flagPrint(hex1, hex1, hex1, operation);
+                            } // else if(lineCount >= 9 && lineCount <= 20){
+                            //     myfile >> operation >> std::hex >> hex1 >> binPlaces;
+                            //     hexResult = arithmeticCommand(operation, hex1, binPlaces);
+                            //     std::cout << operation << " 0x" << std::hex << hex1 << " " << binPlaces << ": 0x" << std::hex << hexResult << std::endl;
+                            //     flagPrint(hexResult, hex1, hex2, operation);
+                            // }else{
+                            //     myfile >> operation >> std::hex >> hex1 >> std::hex >> hex2;
+                            //     hexResult = arithmeticCommand(operation, hex1, hex2);
+                            //     std::cout << operation << " 0x" << std::hex << hex1 << " 0x" << std::hex << hex2 << ": 0x" << std::hex << hexResult << std::endl;
+                            //     flagPrint(hexResult, hex1, hex2, operation);
+                            // }
                         }
                     }
                     myfile.close();
@@ -142,7 +145,7 @@ int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
 }
 
 //Has to take in all registries as parameters (oh lawd)
-void moveRegister(std::string operation, uint32_t registries[] ,int regNum, uint32_t hex1){
+void moveRegister(uint32_t registries[] ,int regNum, uint32_t hex1){
     registries[regNum] = hex1;
 }
 
