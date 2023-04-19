@@ -20,7 +20,7 @@ void mainMenu();
 int getOpt();
 int arithmeticCommand(std::string, uint32_t, uint32_t);
 int ASR(uint32_t, uint32_t);
-bool Nflag(uint32_t);
+bool Nflag(uint32_t, std::string);
 bool Zflag(uint32_t);
 bool Cflag(std::string operation, uint32_t hexResult, uint32_t hex1, uint32_t hex2);
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation);
@@ -173,7 +173,7 @@ int ASR(uint32_t hex1, uint32_t  hex2){
 }
 
 bool Nflag(uint32_t hexResult, std::string operation){
-    if(hexResult > 0x7FFFFFFF || operation.length() == 4){
+    if(hexResult > 0x7FFFFFFF && operation.length() == 4){
         return true;
     }
     return false;
