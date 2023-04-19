@@ -123,11 +123,7 @@ void mainMenu(){
 }
 
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation){
-    if(operation.length() == 4 || operation == "CMP" || operation == "cmp"){
-        std::cout << std::endl << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) <<  " C: " << Cflag(operation, hexResult, hex1, hex2) << " V: " << Vflag(hexResult, hex1, hex2, operation) << std::endl << std::endl;
-    }else{
-        std::cout << std::endl << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl << std::endl;
-    }
+    std::cout << std::endl << "N: " << Nflag(hexResult, operation) << " Z: " << Zflag(hexResult) <<  " C: " << Cflag(operation, hexResult, hex1, hex2) << " V: " << Vflag(hexResult, hex1, hex2, operation) << std::endl << std::endl;
 }
 
 int getOpt(){
@@ -176,8 +172,8 @@ int ASR(uint32_t hex1, uint32_t  hex2){
     return hexResult;
 }
 
-bool Nflag(uint32_t hexResult){
-    if(hexResult > 0x7FFFFFFF){
+bool Nflag(uint32_t hexResult, std::string operation){
+    if(hexResult > 0x7FFFFFFF || operation.length() == 4){
         return true;
     }
     return false;
@@ -196,7 +192,7 @@ bool Cflag(std::string operation, uint32_t hexResult, uint32_t hex1, uint32_t he
         if(hexResult < hex1){
             carry = true;
         }
-    }else if(operation ==  "SUB" || "SUBS" || "sub" || "subs" || "CMP" || "cmp"){
+    }else if(operation == "SUBS" || "subs" || "CMP" || "cmp"){
         if(hexResult > hex1){
             carry = true;
         }
