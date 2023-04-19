@@ -32,11 +32,10 @@ int main(){
     std::fstream myfile("Programming-Project-3.txt");
     int userChoice, regNum, regNum2, regNum3;
     //char for reading the r for registry and the hashes
-    char buffer, stopChar = '<'; 
+    char buffer; 
     std::string line, operation;
     uint32_t hex1, hex2, hexResult, binPlaces;
     uint32_t registries[MAX]= { 0 };
-    uint32_t zero = 0;
     if (myfile.is_open()){
         myfile >> operation >> buffer >> regNum >> buffer >> buffer >> std::hex >> hex1;
         myfile.close();
