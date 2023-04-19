@@ -32,7 +32,7 @@ int main(){
     std::fstream myfile("Programming-Project-3.txt");
     int userChoice, regNum, regNum2, regNum3;
     //char for reading the r for registry and the hashes
-    char buffer; 
+    char buffer, stopChar = '<'; 
     std::string line, operation;
     uint32_t hex1, hex2, hexResult, binPlaces;
     uint32_t registries[MAX]= { 0 };
@@ -76,7 +76,7 @@ int main(){
                                 std::cout << operation << " R" << regNum << ", R" << regNum2 << ", #" << binPlaces << std::endl;
                                 printRegistries(registries);
                                 flagPrint(hexResult, hex1, hex2, operation);
-                            }else if((lineCount >= 3 || lineCount <= 4) || (lineCount >= 6 || lineCount <= 8)){
+                            }else{
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2 >> buffer >> buffer >> regNum3;
                                 hex1 = registries[regNum2];
                                 hex2 = registries[regNum3];
@@ -124,7 +124,7 @@ void mainMenu(){
 }
 
 void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation){
-    if(operation.length() == 4 || operation == "CMP" || operation == "cmp" || operation == "TST" || operation == "tst"){
+    if(operation.length() == 4 || operation == "CMP" || operation == "cmp"){
         std::cout << std::endl << "N: " << Nflag(hexResult) << " Z: " << Zflag(hexResult) <<  " C: " << Cflag(operation, hexResult, hex1, hex2) << " V: " << Vflag(hexResult, hex1, hex2) << std::endl << std::endl;
     }else{
         std::cout << std::endl << "N: 0 " << " Z: 0" << " C: 0" << " V: 0" << std::endl << std::endl;
