@@ -13,6 +13,7 @@
 #include <sstream>
 #include <string>
 #include <cstdint>
+//#include <cbits>
 #define MAX 8
 
 //Prototype functions
@@ -134,21 +135,21 @@ int getOpt(){
 
 int arithmeticCommand(std::string operation, uint32_t hex1, uint32_t hex2){
     int hexResult;
-    if(operation == "ADD" || "ADDS" || "add" || "adds"){
+    if(operation == "ADD" || operation == "ADDS" || operation == "add" || operation == "adds"){
         hexResult = hex1 + hex2;
-    }else if(operation == "SUB" || "SUBS" || "sub" || "subs" || "CMP" || "cmp"){
+    }else if(operation == "SUB" || operation == "SUBS" || operation == "sub" || operation == "subs" || operation == "CMP" || operation == "cmp"){
         hexResult = hex1 - hex2;
-    }else if(operation == "XOR" || "XORS" || "xor" || "xors"){
+    }else if(operation == "XOR" || operation == "XORS" || operation == "xor" || operation == "xors"){
         hexResult = hex1 ^ hex2;
-    }else if(operation == "LSL" || "LSLS" || "lsl" || "lsls"){
+    }else if(operation == "LSL" || operation == "LSLS" || operation == "lsl" || operation == "lsls"){
         hexResult = hex1 << hex2;
-    }else if(operation == "ASR" || "ASRS" || "asr" || "asrs"){
+    }else if(operation == "ASR" || operation == "ASRS" || operation == "asr" || operation == "asrs"){
         hexResult = ASR(hex1, hex2);
-    }else if(operation == "LSR" || "LSRS" || "lsr" || "lsrs"){
+    }else if(operation == "LSR" || operation == "LSRS" || operation == "lsr" || operation == "lsrs"){
         hexResult = hex1 >> hex2;
-    }else if(operation == "ORR" || "ORRS" || "orr" || "orrs"){
+    }else if(operation == "ORR" || operation == "ORRS" || operation == "orr" || operation == "orrs"){
         hexResult = hex1 | hex2;
-    }else if(operation == "AND" || "ANDS" || "and" || "ands" || "TST" || "tst"){
+    }else if(operation == "AND" || operation == "ANDS" || operation == "and" || operation == "ands" || operation == "TST" || operation == "tst"){
         hexResult = hex1 & hex2;
     }
     return hexResult;
@@ -205,10 +206,10 @@ bool Cflag(std::string operation, uint32_t hexResult, uint32_t hex1, uint32_t he
 }
 
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation){
-    if((hexResult < hex1) || (hexResult < hex2)){
-        return true;
-    }else if(operation == "TST" || "tst" || "ANDS" || "ands" || "xors" || "XORS" || "NOTS" || "nots"){
+    if(operation == "TST" || "tst" || "ANDS" || "ands" || "xors" || "XORS" || "NOTS" || "nots" ){
         return false;
+    }else if((hexResult < hex1) || (hexResult < hex2)){
+        return true;
     }else{
         return false;
     }
