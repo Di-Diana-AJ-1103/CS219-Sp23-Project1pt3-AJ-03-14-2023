@@ -21,7 +21,9 @@ TLDR: Performs an assortment of bitwise operations, shows set flags, shows resul
 5.  Has the hexadecimals and operations in question read from an external .txt file. 
 
 ## Execution
-To nagivate to the folder holding this project, make sure to  type "cd AJ-Di-Diana-Programming-Project1-Part2"
+PLEASE UNZIP THE ZIP FILE AND REMEMBER WHERE IT IS IN YOUR COMPUTER
+Type "cd {location}" to where the folder named "AJ_Di-Diana_proj3" within computer directory
+To nagivate to the folder holding this project, make sure to  type "cd AJ_Di-Diana_proj3"
     - Use the "ls" command to look for the directories you need to help navigate further.
 To run the file, type "make" then "./machineLangSim" in the command line.
 If the executable "machineLangSim" and "main.o" object are already present, skip to typing in "./machineLangSim"
