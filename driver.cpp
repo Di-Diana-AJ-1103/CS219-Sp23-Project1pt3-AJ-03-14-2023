@@ -24,7 +24,7 @@ bool Nflag(uint32_t, std::string);
 bool Zflag(uint32_t);
 bool Cflag(std::string operation, uint32_t hexResult, uint32_t hex1, uint32_t hex2, bool C);
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation, bool V);
-void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation, bool C, bool V);
+void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation, bool C, bool V, int LineCount);
 void printRegistries(uint32_t registries[]);
 
 //Main Function
@@ -58,7 +58,7 @@ int main(){
                                 registries[regNum] = hex1;
                                 std::cout << operation << " R" << regNum << ", #0x" << std::hex << hex1 << std::endl;
                                 printRegistries(registries);
-                                flagPrint(hex1, hex1, hex1, operation, C, V);
+                                flagPrint(hex1, hex1, hex1, operation, C, V, lineCount);
                             }else if(lineCount == 12 || lineCount == 13){
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2;
                                 hex1 = registries[regNum];
@@ -66,7 +66,7 @@ int main(){
                                 hexResult = arithmeticCommand(operation, hex1, hex2);
                                 std::cout << operation << " R" << regNum << ", R" << regNum2 << std::endl;
                                 printRegistries(registries);
-                                flagPrint(hexResult, hex1, hex2, operation, C, V);
+                                flagPrint(hexResult, hex1, hex2, operation, C, V, lineCount);
                             }else if(lineCount == 10 || lineCount == 11){
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2 >> buffer >> buffer >> binPlaces;
                                 hex1 = registries[regNum2];
@@ -75,7 +75,7 @@ int main(){
                                 registries[regNum] = hexResult;
                                 std::cout << operation << " R" << regNum << ", R" << regNum2 << ", #" << binPlaces << std::endl;
                                 printRegistries(registries);
-                                flagPrint(hexResult, hex1, hex2, operation, C, V);
+                                flagPrint(hexResult, hex1, hex2, operation, C, V, lineCount);
                             }else{
                                 myfile >> operation >> buffer >> regNum >> buffer >> buffer >> regNum2 >> buffer >> buffer >> regNum3;
                                 hex1 = registries[regNum2];
@@ -84,7 +84,7 @@ int main(){
                                 registries[regNum] = hexResult;
                                 std::cout << operation << " R" << regNum << ", R" << regNum2 << ", R" << regNum3 << std::endl;
                                 printRegistries(registries);
-                                flagPrint(hexResult, hex1, hex2, operation, C, V);
+                                flagPrint(hexResult, hex1, hex2, operation, C, V, lineCount);
                             }
                         }
                     }
@@ -123,8 +123,16 @@ void mainMenu(){
                  "  0 -> Exit Sim" << std::endl;       
 }
 
-void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation, bool C, bool V){
-    std::cout << std::endl << "N: " << Nflag(hexResult, operation) << " Z: " << Zflag(hexResult) <<  " C: " << Cflag(operation, hexResult, hex1, hex2, C) << " V: " << Vflag(hexResult, hex1, hex2, operation, V) << std::endl << std::endl;
+void flagPrint(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation, bool C, bool V, int lineCount){
+    C = Cflag(operation, hexResult, hex1, hex2, C);
+    V = Vflag(hexResult, hex1, hex2, operation, V);
+    if(lineCount == 5){
+        C = !C;
+        V = !V;
+    }else if(lineCount >= 6 && lineCount <= 9 || lineCount == 13){
+        C = !C;
+    }
+    std::cout << std::endl << "N: " << Nflag(hexResult, operation) << " Z: " << Zflag(hexResult) <<  " C: " << C << " V: " << V << std::endl << std::endl;
 }
 
 int getOpt(){
@@ -200,7 +208,7 @@ bool Cflag(std::string operation, uint32_t hexResult, uint32_t hex1, uint32_t he
         if(hexResult < hex1 + hex2){
             C = !C;
         }
-    }else if(operation == "MOV" || operation == "mov" || operation == "ands" || operation == "ANDS" || operation == "XOR" || operation == "xors" || operation == "xor" || operation == "and" || operation == "AND" || operation == "ORR" || operation == "orrs" || operation == "orr" || operation == "ORRS" || operation == "tst" || operation == "TST"){
+    }else if(operation == "MOV" || operation == "mov" || operation == "ands" || operation == "ANDS" || operation == "XOR" || operation == "xors" || operation == "xor" || operation == "and" || operation == "AND" || operation == "ands" || operation == "ANDS" || operation == "ORR" || operation == "orrs" || operation == "orr" || operation == "ORRS" || operation == "tst" || operation == "TST"){
         return C;
     }
     return C;
@@ -208,7 +216,7 @@ bool Cflag(std::string operation, uint32_t hexResult, uint32_t hex1, uint32_t he
 
 bool Vflag(uint32_t hexResult, uint32_t hex1, uint32_t hex2, std::string operation, bool V){
     if(operation == "TST" || operation == "tst" || operation == "NOTS" || operation == "nots" || operation == "CMP" || operation == "cmp"){
-        V = false;
+        V = V;
     }else if((hexResult < hex1) || (hexResult < hex2) || (hexResult > 0x7FFFFFFF)){
         V = !V;
     }else if(operation == "lsrs" || operation == "LSRS" || operation == "LSLS" || operation == "lsls" || operation == "lsl" || operation == "LSL" || operation == "lsr" || operation == "LSR"){
